@@ -1,7 +1,7 @@
 # Entrega 1 — Criptografia Assimétrica e Confiança
 
 **Disciplina:** Segurança da Informação — Unit  
-**Aluno:** Eduardo Andrade  
+**Aluno:** Eduardo Andrade Almeida, Gabriel Lima de Carvalho, Hyago Oliveira Costa
 **Docente:** Ana Carla do Nascimento Santos
 
 ---
