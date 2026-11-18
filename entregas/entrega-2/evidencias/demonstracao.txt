@@ -1,0 +1,120 @@
+
+  ──────────────────────────────────────────────────────────────
+  ENTREGA 2 — EVIDÊNCIA DE EXECUÇÃO
+  ──────────────────────────────────────────────────────────────
+
+Data: 2026-11-17T22:59:06-03:00
+Python: 3.13.5 | Sistema: Windows
+Escopo: SQLite temporário local; somente dados fictícios.
+Entradas na base local: 15021
+
+  1. CADASTRO DAS DUAS CONTAS FICTÍCIAS
+  ──────────────────────────────────────────────────────────────
+
+  [1/7] Validando e normalizando o identificador do usuário...
+
+  [2/7] Conferindo o tamanho da senha: 8 a 128 caracteres...
+
+  [3/7] Consultando as bases locais de senhas comuns e vazadas...
+
+  [4/7] Gerando salt aleatório individual de 16 bytes...
+        Salt gerado (hex): 278780727a6cbb94f4be34dcc95a2f0a
+
+  [5/7] Derivando hash com PBKDF2-HMAC-SHA256 (600,000 iterações)...
+        Hash derivado (hex): 9d2eb4259603fb27a66abead8514182f4e9b22cb8dcc750af3eaff59ad4b89ea
+
+  [6/7] Gravando usuário, algoritmo, iterações, salt e hash no SQLite...
+
+  [7/7] Transação confirmada. A senha original não foi gravada.
+
+  [1/7] Validando e normalizando o identificador do usuário...
+
+  [2/7] Conferindo o tamanho da senha: 8 a 128 caracteres...
+
+  [3/7] Consultando as bases locais de senhas comuns e vazadas...
+
+  [4/7] Gerando salt aleatório individual de 16 bytes...
+        Salt gerado (hex): ecb68d56659ee53833ea9644838cb380
+
+  [5/7] Derivando hash com PBKDF2-HMAC-SHA256 (600,000 iterações)...
+        Hash derivado (hex): 63d4acb2eeb3315ce17291e88ace26ce5b7c1174dfede8bae19ac8c1f8ee45bd
+
+  [6/7] Gravando usuário, algoritmo, iterações, salt e hash no SQLite...
+
+  [7/7] Transação confirmada. A senha original não foi gravada.
+
+  2. REGISTROS PROTEGIDOS — SALT/HASH EM HEXADECIMAL
+  ──────────────────────────────────────────────────────────────
+
+  Usuário: aluno_demo  |  pbkdf2-sha256  |  600000 iterações
+  Salt: 278780727a6cbb94f4be34dcc95a2f0a
+  Hash: 9d2eb4259603fb27a66abead8514182f4e9b22cb8dcc750af3eaff59ad4b89ea
+
+  Usuário: colega_demo  |  pbkdf2-sha256  |  600000 iterações
+  Salt: ecb68d56659ee53833ea9644838cb380
+  Hash: 63d4acb2eeb3315ce17291e88ace26ce5b7c1174dfede8bae19ac8c1f8ee45bd
+
+  3. VERIFICAÇÃO DO ARMAZENAMENTO
+  ──────────────────────────────────────────────────────────────
+  ✔ Não existe coluna de senha em texto puro
+  ✔ Senha fictícia ausente do arquivo SQLite
+  ✔ Mesma senha possui salts e hashes distintos
+
+  4. LOGIN COM SENHA CORRETA — ESPERADO: PERMITIR
+  ──────────────────────────────────────────────────────────────
+
+  [1/5] Validando os dados informados para o login...
+
+  [2/5] Consultando o registro pelo usuário com SQL parametrizado...
+
+  [3/5] Preparando salt e parâmetros; sem cadastro, usar registro fictício...
+
+  [4/5] Derivando o candidato com PBKDF2-HMAC-SHA256 (600,000 iterações)...
+
+  [5/5] Comparando os valores de 32 bytes com hmac.compare_digest...
+  ✔ Login correto aceito
+
+  5. SENHA INCORRETA — ESPERADO: BLOQUEAR
+  ──────────────────────────────────────────────────────────────
+
+  [1/5] Validando os dados informados para o login...
+
+  [2/5] Consultando o registro pelo usuário com SQL parametrizado...
+
+  [3/5] Preparando salt e parâmetros; sem cadastro, usar registro fictício...
+
+  [4/5] Derivando o candidato com PBKDF2-HMAC-SHA256 (600,000 iterações)...
+
+  [5/5] Comparando os valores de 32 bytes com hmac.compare_digest...
+  [BLOQUEIO ESPERADO] Senha incorreta rejeitada
+
+  6. USUÁRIO INEXISTENTE — ESPERADO: BLOQUEAR
+  ──────────────────────────────────────────────────────────────
+
+  [1/5] Validando os dados informados para o login...
+
+  [2/5] Consultando o registro pelo usuário com SQL parametrizado...
+
+  [3/5] Preparando salt e parâmetros; sem cadastro, usar registro fictício...
+
+  [4/5] Derivando o candidato com PBKDF2-HMAC-SHA256 (600,000 iterações)...
+
+  [5/5] Comparando os valores de 32 bytes com hmac.compare_digest...
+  [BLOQUEIO ESPERADO] Usuário inexistente rejeitado
+
+  7. SENHA DAS BASES LOCAIS — ESPERADO: BLOQUEAR
+  ──────────────────────────────────────────────────────────────
+
+  [1/7] Validando e normalizando o identificador do usuário...
+
+  [2/7] Conferindo o tamanho da senha: 8 a 128 caracteres...
+
+  [3/7] Consultando as bases locais de senhas comuns e vazadas...
+  [BLOQUEIO ESPERADO] Senha da base rejeitada: Senha presente na base local de senhas expostas/comuns.
+
+Verificação usa hashlib.pbkdf2_hmac + hmac.compare_digest.
+Fim: banco temporário será removido; nenhum cadastro real foi utilizado.
+
+  ──────────────────────────────────────────────────────────────
+  RESULTADO: TODAS AS VERIFICAÇÕES APROVADAS.
+  ──────────────────────────────────────────────────────────────

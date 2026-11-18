@@ -1,6 +1,6 @@
 """
 Menu interativo — Entrega 1: Criptografia Assimétrica e Confiança
-Execute: python3 src/menu.py
+Execute da raiz: python entregas/entrega-1/src/menu.py
 """
 
 import os
@@ -23,7 +23,8 @@ CINZA  = "\033[90m"
 BRANCO = "\033[97m"
 
 def limpar():
-    os.system("clear")
+    if sys.stdout.isatty():
+        os.system("cls" if os.name == "nt" else "clear")
 
 def pausar():
     input(f"\n{CINZA}  Pressione ENTER para voltar ao menu...{RESET}")

@@ -1,0 +1,34 @@
+
+  ──────────────────────────────────────────────────────────────
+  ENTREGA 2 — TESTES AUTOMATIZADOS
+  ──────────────────────────────────────────────────────────────
+
+  → Data: 2026-11-17T23:09:57-03:00
+  → Python 3.13.5 | Windows
+  → Bancos temporários; 600.000 iterações reais; cadastros do menu preservados.
+  → Verde: aprovado | Vermelho: falha/erro | Amarelo: ignorado
+
+  01  Ausência de senha em texto puro             [APROVADO]  0.41s
+  02  Base ausente interrompe inicialização       [APROVADO]  0.21s
+  03  Bloqueio de senha da base vazada            [APROVADO]  0.21s
+  04  Base vazia interrompe inicialização         [APROVADO]  0.21s
+  05  Comparação segura com compare_digest        [APROVADO]  1.03s
+  06  Duplicidade sem sobrescrever cadastro       [APROVADO]  0.82s
+  07  Frases e espaços preservados                [APROVADO]  0.82s
+  08  Rejeição de hash adulterado                 [APROVADO]  0.62s
+  09  Limites de tamanho da senha                 [APROVADO]  1.85s
+  10  Login com senha correta                     [APROVADO]  0.62s
+  11  Rejeição de credenciais incorretas          [APROVADO]  0.82s
+  12  Salts e hashes individuais                  [APROVADO]  1.02s
+  13  Rejeição de parâmetros inválidos            [APROVADO]  0.42s
+  14  Persistência após reabrir o banco           [APROVADO]  0.81s
+  15  Usuário inválido e tentativa de SQL         [APROVADO]  1.43s
+----------------------------------------------------------------------
+Ran 15 tests in 11.320s
+
+OK
+  → Executados: 15 | Falhas: 0 | Erros: 0 | Ignorados: 0
+
+  ──────────────────────────────────────────────────────────────
+  RESULTADO: TODOS OS TESTES APROVADOS.
+  ──────────────────────────────────────────────────────────────

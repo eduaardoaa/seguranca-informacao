@@ -1,0 +1,341 @@
+
+  ╔══════════════════════════════════════════════════════════════╗
+  ║             SEGURANÇA DA INFORMAÇÃO — Entrega 2              ║
+  ║                  Hash e autenticação segura                  ║
+  ╚══════════════════════════════════════════════════════════════╝
+
+  Escolha uma operação ou demonstração:
+
+  [1]  Cadastrar usuário → PASSO A PASSO
+  [2]  Entrar com usuário → PASSO A PASSO
+  [3]  Login correto → SUCESSO
+  [4]  Senha incorreta → REJEIÇÃO
+  [5]  Usuário inexistente → REJEIÇÃO
+  [6]  Mesma senha → SALTS E HASHES DIFERENTES
+  [7]  Senha comum/vazada → CADASTRO REJEITADO
+  [8]  Hash adulterado → LOGIN REJEITADO
+  [9]  Rodar todos os 6 cenários em sequência
+
+  [0]  Sair
+
+  Opção: 
+  ──────────────────────────────────────────────────────────────
+  TODOS OS 6 CENÁRIOS
+  ──────────────────────────────────────────────────────────────
+
+  → Verde: teste aprovado  |  Amarelo: bloqueio esperado  |  Vermelho: falha inesperada
+
+  ──────────────────────────────────────────────────────────────
+  CENÁRIO 1 — Login correto → SUCESSO
+  ──────────────────────────────────────────────────────────────
+
+  → Ambiente: banco temporário próprio; somente dados fictícios.
+  → Esperado: Permitir o login com a senha correta.
+
+  PREPARAÇÃO — CADASTRO FICTÍCIO
+  ──────────────────────────────────────────────────────────────
+  → Preparando a conta fictícia aluno_demo:
+
+  [1/7] Validando e normalizando o identificador do usuário...
+
+  [2/7] Conferindo o tamanho da senha: 8 a 128 caracteres...
+
+  [3/7] Consultando as bases locais de senhas comuns e vazadas...
+
+  [4/7] Gerando salt aleatório individual de 16 bytes...
+        Salt gerado (hex): dc49ef063c420881128520a1072d3da7
+
+  [5/7] Derivando hash com PBKDF2-HMAC-SHA256 (600,000 iterações)...
+        Hash derivado (hex): f9eda597e5481eb52471544b122b11c7a2cf0406b9c41e9333014674205eab44
+
+  [6/7] Gravando usuário, algoritmo, iterações, salt e hash no SQLite...
+
+  [7/7] Transação confirmada. A senha original não foi gravada.
+
+  EXECUÇÃO — VERIFICAÇÃO DO LOGIN
+  ──────────────────────────────────────────────────────────────
+  → Executando o login:
+
+  [1/5] Validando os dados informados para o login...
+
+  [2/5] Consultando o registro pelo usuário com SQL parametrizado...
+
+  [3/5] Preparando salt e parâmetros; sem cadastro, usar registro fictício...
+
+  [4/5] Derivando o candidato com PBKDF2-HMAC-SHA256 (600,000 iterações)...
+
+  [5/5] Comparando os valores de 32 bytes com hmac.compare_digest...
+  ✔ Resultado observado corresponde ao esperado.
+  ✔ Login realizado com sucesso.
+
+  ──────────────────────────────────────────────────────────────
+  RESULTADO: APROVADO — comportamento esperado confirmado.
+  ──────────────────────────────────────────────────────────────
+  → Banco temporário removido; os usuários cadastrados no menu foram preservados.
+
+  ──────────────────────────────────────────────────────────────
+  CENÁRIO 2 — Senha incorreta → REJEIÇÃO
+  ──────────────────────────────────────────────────────────────
+
+  → Ambiente: banco temporário próprio; somente dados fictícios.
+  → Esperado: Bloquear o login com senha incorreta.
+
+  PREPARAÇÃO — CADASTRO FICTÍCIO
+  ──────────────────────────────────────────────────────────────
+  → Preparando a conta fictícia aluno_demo:
+
+  [1/7] Validando e normalizando o identificador do usuário...
+
+  [2/7] Conferindo o tamanho da senha: 8 a 128 caracteres...
+
+  [3/7] Consultando as bases locais de senhas comuns e vazadas...
+
+  [4/7] Gerando salt aleatório individual de 16 bytes...
+        Salt gerado (hex): f1fc187af969107778140b483e9efe13
+
+  [5/7] Derivando hash com PBKDF2-HMAC-SHA256 (600,000 iterações)...
+        Hash derivado (hex): 83d9bd5e4d411bea80dd0222d16ce3060597630ce9193be8cb7a1eda5b5084d7
+
+  [6/7] Gravando usuário, algoritmo, iterações, salt e hash no SQLite...
+
+  [7/7] Transação confirmada. A senha original não foi gravada.
+
+  EXECUÇÃO — VERIFICAÇÃO DO LOGIN
+  ──────────────────────────────────────────────────────────────
+  ⚠ Simulando uma tentativa com senha incorreta.
+  → Executando o login:
+
+  [1/5] Validando os dados informados para o login...
+
+  [2/5] Consultando o registro pelo usuário com SQL parametrizado...
+
+  [3/5] Preparando salt e parâmetros; sem cadastro, usar registro fictício...
+
+  [4/5] Derivando o candidato com PBKDF2-HMAC-SHA256 (600,000 iterações)...
+
+  [5/5] Comparando os valores de 32 bytes com hmac.compare_digest...
+  ✔ Resultado observado corresponde ao esperado.
+  [BLOQUEIO ESPERADO] Usuário ou senha inválidos.
+
+  ──────────────────────────────────────────────────────────────
+  RESULTADO: APROVADO — comportamento esperado confirmado.
+  ──────────────────────────────────────────────────────────────
+  → Banco temporário removido; os usuários cadastrados no menu foram preservados.
+
+  ──────────────────────────────────────────────────────────────
+  CENÁRIO 3 — Usuário inexistente → REJEIÇÃO
+  ──────────────────────────────────────────────────────────────
+
+  → Ambiente: banco temporário próprio; somente dados fictícios.
+  → Esperado: Bloquear o login do usuário inexistente.
+
+  PREPARAÇÃO — CADASTRO FICTÍCIO
+  ──────────────────────────────────────────────────────────────
+  → Preparando a conta fictícia aluno_demo:
+
+  [1/7] Validando e normalizando o identificador do usuário...
+
+  [2/7] Conferindo o tamanho da senha: 8 a 128 caracteres...
+
+  [3/7] Consultando as bases locais de senhas comuns e vazadas...
+
+  [4/7] Gerando salt aleatório individual de 16 bytes...
+        Salt gerado (hex): 93551d77a374d248806ee8f48d0947b6
+
+  [5/7] Derivando hash com PBKDF2-HMAC-SHA256 (600,000 iterações)...
+        Hash derivado (hex): c6c6511ddae5764b8cfe33a6abb0b44cc09c6bd215b5f4518ff834f03a94b774
+
+  [6/7] Gravando usuário, algoritmo, iterações, salt e hash no SQLite...
+
+  [7/7] Transação confirmada. A senha original não foi gravada.
+
+  EXECUÇÃO — VERIFICAÇÃO DO LOGIN
+  ──────────────────────────────────────────────────────────────
+  ⚠ Simulando uma tentativa para um usuário sem cadastro.
+  → Executando o login:
+
+  [1/5] Validando os dados informados para o login...
+
+  [2/5] Consultando o registro pelo usuário com SQL parametrizado...
+
+  [3/5] Preparando salt e parâmetros; sem cadastro, usar registro fictício...
+
+  [4/5] Derivando o candidato com PBKDF2-HMAC-SHA256 (600,000 iterações)...
+
+  [5/5] Comparando os valores de 32 bytes com hmac.compare_digest...
+  ✔ Resultado observado corresponde ao esperado.
+  [BLOQUEIO ESPERADO] Usuário ou senha inválidos.
+
+  ──────────────────────────────────────────────────────────────
+  RESULTADO: APROVADO — comportamento esperado confirmado.
+  ──────────────────────────────────────────────────────────────
+  → Banco temporário removido; os usuários cadastrados no menu foram preservados.
+
+  ──────────────────────────────────────────────────────────────
+  CENÁRIO 4 — Mesma senha → SALTS E HASHES DIFERENTES
+  ──────────────────────────────────────────────────────────────
+
+  → Ambiente: banco temporário próprio; somente dados fictícios.
+  → Esperado: Gerar salts e hashes distintos para duas contas com a mesma senha.
+
+  PREPARAÇÃO — CADASTRO FICTÍCIO
+  ──────────────────────────────────────────────────────────────
+  → Preparando a conta fictícia aluno_demo:
+
+  [1/7] Validando e normalizando o identificador do usuário...
+
+  [2/7] Conferindo o tamanho da senha: 8 a 128 caracteres...
+
+  [3/7] Consultando as bases locais de senhas comuns e vazadas...
+
+  [4/7] Gerando salt aleatório individual de 16 bytes...
+        Salt gerado (hex): 734a1cece07da83cea1685abf07327d3
+
+  [5/7] Derivando hash com PBKDF2-HMAC-SHA256 (600,000 iterações)...
+        Hash derivado (hex): 1d1c4a40c5835d74bba4c3c5278e394bf0099cadb054500a898047f8c9f01089
+
+  [6/7] Gravando usuário, algoritmo, iterações, salt e hash no SQLite...
+
+  [7/7] Transação confirmada. A senha original não foi gravada.
+
+  EXECUÇÃO — SEGUNDA CONTA E COMPARAÇÃO
+  ──────────────────────────────────────────────────────────────
+  → Cadastrando colega_demo com a mesma senha, sem expor seu texto:
+
+  [1/7] Validando e normalizando o identificador do usuário...
+
+  [2/7] Conferindo o tamanho da senha: 8 a 128 caracteres...
+
+  [3/7] Consultando as bases locais de senhas comuns e vazadas...
+
+  [4/7] Gerando salt aleatório individual de 16 bytes...
+        Salt gerado (hex): 952b0ba6a20fc4cd2990168c80e2c953
+
+  [5/7] Derivando hash com PBKDF2-HMAC-SHA256 (600,000 iterações)...
+        Hash derivado (hex): 3c349da6b598a264136c013f1c278192ccd58ad695c36a52a5bd21edde57bd73
+
+  [6/7] Gravando usuário, algoritmo, iterações, salt e hash no SQLite...
+
+  [7/7] Transação confirmada. A senha original não foi gravada.
+  ✔ Cada conta recebeu um salt diferente.
+  ✔ A mesma senha produziu hashes diferentes.
+
+  ──────────────────────────────────────────────────────────────
+  RESULTADO: APROVADO — comportamento esperado confirmado.
+  ──────────────────────────────────────────────────────────────
+  → Banco temporário removido; os usuários cadastrados no menu foram preservados.
+
+  ──────────────────────────────────────────────────────────────
+  CENÁRIO 5 — Senha comum/vazada → CADASTRO REJEITADO
+  ──────────────────────────────────────────────────────────────
+
+  → Ambiente: banco temporário próprio; somente dados fictícios.
+  → Esperado: Bloquear o cadastro antes de gravar a senha da base.
+
+  EXECUÇÃO — TENTATIVA DE CADASTRO
+  ──────────────────────────────────────────────────────────────
+  ⚠ Tentando cadastrar uma senha extraída das bases de bloqueio.
+
+  [1/7] Validando e normalizando o identificador do usuário...
+
+  [2/7] Conferindo o tamanho da senha: 8 a 128 caracteres...
+
+  [3/7] Consultando as bases locais de senhas comuns e vazadas...
+  ✔ Senha bloqueada pela base local.
+  [BLOQUEIO ESPERADO] Senha presente na base local de senhas expostas/comuns.
+  ✔ Nenhum registro foi gravado.
+
+  ──────────────────────────────────────────────────────────────
+  RESULTADO: APROVADO — comportamento esperado confirmado.
+  ──────────────────────────────────────────────────────────────
+  → Banco temporário removido; os usuários cadastrados no menu foram preservados.
+
+  ──────────────────────────────────────────────────────────────
+  CENÁRIO 6 — Hash adulterado → LOGIN REJEITADO
+  ──────────────────────────────────────────────────────────────
+
+  → Ambiente: banco temporário próprio; somente dados fictícios.
+  → Esperado: Bloquear o login depois da alteração do hash.
+
+  PREPARAÇÃO — CADASTRO FICTÍCIO
+  ──────────────────────────────────────────────────────────────
+  → Preparando a conta fictícia aluno_demo:
+
+  [1/7] Validando e normalizando o identificador do usuário...
+
+  [2/7] Conferindo o tamanho da senha: 8 a 128 caracteres...
+
+  [3/7] Consultando as bases locais de senhas comuns e vazadas...
+
+  [4/7] Gerando salt aleatório individual de 16 bytes...
+        Salt gerado (hex): 4949e239fa5f69dc795871f1314e375f
+
+  [5/7] Derivando hash com PBKDF2-HMAC-SHA256 (600,000 iterações)...
+        Hash derivado (hex): 56e7de25a4ac863bff4d44208a2cdff35c1a472989267f82209251dcd0129be9
+
+  [6/7] Gravando usuário, algoritmo, iterações, salt e hash no SQLite...
+
+  [7/7] Transação confirmada. A senha original não foi gravada.
+
+  EXECUÇÃO — VERIFICAÇÃO DO LOGIN
+  ──────────────────────────────────────────────────────────────
+  ⚠ Substituindo o hash da conta fictícia por 32 bytes nulos.
+  → Executando o login:
+
+  [1/5] Validando os dados informados para o login...
+
+  [2/5] Consultando o registro pelo usuário com SQL parametrizado...
+
+  [3/5] Preparando salt e parâmetros; sem cadastro, usar registro fictício...
+
+  [4/5] Derivando o candidato com PBKDF2-HMAC-SHA256 (600,000 iterações)...
+
+  [5/5] Comparando os valores de 32 bytes com hmac.compare_digest...
+  ✔ Resultado observado corresponde ao esperado.
+  [BLOQUEIO ESPERADO] Usuário ou senha inválidos.
+
+  ──────────────────────────────────────────────────────────────
+  RESULTADO: APROVADO — comportamento esperado confirmado.
+  ──────────────────────────────────────────────────────────────
+  → Banco temporário removido; os usuários cadastrados no menu foram preservados.
+
+  RESUMO DAS DEMONSTRAÇÕES
+  ──────────────────────────────────────────────────────────────
+  [APROVADO] Login correto → SUCESSO
+  [APROVADO] Senha incorreta → REJEIÇÃO
+  [APROVADO] Usuário inexistente → REJEIÇÃO
+  [APROVADO] Mesma senha → SALTS E HASHES DIFERENTES
+  [APROVADO] Senha comum/vazada → CADASTRO REJEITADO
+  [APROVADO] Hash adulterado → LOGIN REJEITADO
+
+  Total: 6  |  Aprovados: 6  |  Falhas: 0
+  Duração: 3.57s
+  Uma rejeição esperada indica que a proteção funcionou.
+
+  ──────────────────────────────────────────────────────────────
+  RESULTADO: TODOS OS 6 CENÁRIOS APROVADOS.
+  ──────────────────────────────────────────────────────────────
+
+  Pressione ENTER para voltar ao menu...
+  ╔══════════════════════════════════════════════════════════════╗
+  ║             SEGURANÇA DA INFORMAÇÃO — Entrega 2              ║
+  ║                  Hash e autenticação segura                  ║
+  ╚══════════════════════════════════════════════════════════════╝
+
+  Escolha uma operação ou demonstração:
+
+  [1]  Cadastrar usuário → PASSO A PASSO
+  [2]  Entrar com usuário → PASSO A PASSO
+  [3]  Login correto → SUCESSO
+  [4]  Senha incorreta → REJEIÇÃO
+  [5]  Usuário inexistente → REJEIÇÃO
+  [6]  Mesma senha → SALTS E HASHES DIFERENTES
+  [7]  Senha comum/vazada → CADASTRO REJEITADO
+  [8]  Hash adulterado → LOGIN REJEITADO
+  [9]  Rodar todos os 6 cenários em sequência
+
+  [0]  Sair
+
+  Opção: 
+  Até logo!
+
